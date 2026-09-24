@@ -1,0 +1,1966 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mi Estas · 世界语与人工智能社团</title>
+<meta name="description" content="Mi Estas —— 当普世语言遇见智能纪元。一个关于世界语与人工智能的研究,学习与社群。" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   DESIGN TOKENS
+   ========================================================= */
+:root{
+  --ink:#0a0d14;
+  --ink-2:#10141d;
+  --ink-3:#161b26;
+  --line:#262b38;
+  --line-soft:#1c2230;
+  --paper:#f3ecdc;
+  --paper-2:#e8dfc9;
+  --paper-mute:#b8ad96;
+  --gold:#c9a961;
+  --gold-soft:#d8be7e;
+  --gold-deep:#8a6f2a;
+  --emerald:#3a8a6a;
+  --emerald-deep:#0e5c4a;
+  --emerald-glow:#5fb894;
+  --indigo:#7a6db8;
+  --serif:'Cormorant Garamond','Noto Serif SC',serif;
+  --sans:'Outfit',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--ink);
+  color:var(--paper);
+  font-weight:300;
+  line-height:1.6;
+  font-size:15px;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(122,109,184,0.07), transparent 60%),
+    radial-gradient(ellipse 50% 50% at 0% 60%, rgba(58,138,106,0.06), transparent 60%),
+    linear-gradient(180deg, #0a0d14 0%, #0c1019 50%, #0a0d14 100%);
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;border:none;background:none;cursor:pointer;color:inherit}
+ul,ol{list-style:none}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+.serif{font-family:var(--serif);font-weight:400}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.32em;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:500;
+}
+.eyebrow-mute{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--paper-mute);
+  font-weight:500;
+}
+
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;letter-spacing:-0.01em;color:var(--paper)}
+h1{font-size:clamp(48px,9vw,128px);line-height:0.95;font-weight:300}
+h2{font-size:clamp(34px,5vw,68px);line-height:1.05;font-weight:300}
+h3{font-size:clamp(22px,2.4vw,30px);line-height:1.2;font-weight:400}
+h4{font-size:18px;font-weight:500;letter-spacing:0.02em}
+
+p{color:var(--paper-2);line-height:1.75}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+.container{max-width:1280px;margin:0 auto;padding:0 32px}
+@media (max-width:768px){.container{padding:0 20px}}
+
+section{position:relative}
+
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--line) 20%,var(--line) 80%,transparent);
+}
+.divider-gold{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold) 20%,var(--gold) 80%,transparent);
+  opacity:0.4;
+}
+
+/* =========================================================
+   NOISE OVERLAY (subtle texture)
+   ========================================================= */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1000;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:100;
+  padding:20px 0;
+  transition:all 0.4s ease;
+  background:linear-gradient(180deg,rgba(10,13,20,0.85),rgba(10,13,20,0));
+  backdrop-filter:blur(0px);
+}
+.nav.scrolled{
+  background:rgba(10,13,20,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line-soft);
+  padding:14px 0;
+}
+.nav-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand-mark{
+  width:32px;height:32px;
+  position:relative;
+}
+.brand-name{
+  font-family:var(--serif);
+  font-size:18px;
+  letter-spacing:0.04em;
+  font-weight:500;
+}
+.brand-name .sep{
+  color:var(--gold);
+  margin:0 8px;
+  font-weight:300;
+}
+.brand-tag{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.2em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+  display:block;
+  margin-top:1px;
+}
+
+.nav-links{
+  display:flex;
+  gap:36px;
+  align-items:center;
+}
+.nav-links a{
+  font-size:13px;
+  letter-spacing:0.06em;
+  color:var(--paper-2);
+  font-weight:400;
+  position:relative;
+  padding:6px 0;
+  transition:color 0.3s ease;
+}
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:1px;
+  background:var(--gold);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s ease;
+}
+.nav-links a:hover{color:var(--paper)}
+.nav-links a:hover::after{transform:scaleX(1)}
+
+.nav-cta{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  padding:10px 22px;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+.nav-cta::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:var(--gold);
+  transform:translateY(100%);
+  transition:transform 0.3s ease;
+  z-index:-1;
+}
+.nav-cta:hover{color:var(--ink)}
+.nav-cta:hover::before{transform:translateY(0)}
+.nav-cta>span{position:relative;z-index:1}
+
+@media (max-width:900px){
+  .nav-links{display:none}
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  min-height:100vh;
+  padding:140px 0 80px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-grid-bg{
+  position:absolute;
+  inset:0;
+  opacity:0.4;
+  background-image:
+    linear-gradient(rgba(201,169,97,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,169,97,0.04) 1px, transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%);
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+}
+
+.hero-meta{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  margin-bottom:32px;
+}
+.hero-meta .line{
+  flex:1;
+  max-width:120px;
+  height:1px;
+  background:var(--gold);
+  opacity:0.6;
+}
+.hero-meta .label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+
+.hero-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(56px,11vw,168px);
+  line-height:0.92;
+  letter-spacing:-0.025em;
+  color:var(--paper);
+  margin-bottom:8px;
+}
+.hero-title .cn{
+  display:block;
+  font-family:'Noto Serif SC','Cormorant Garamond',serif;
+  font-weight:300;
+}
+.hero-title .accent{
+  color:var(--gold);
+  font-style:italic;
+  font-weight:400;
+}
+
+.hero-subtitle{
+  margin-top:48px;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:32px;
+  align-items:start;
+  max-width:780px;
+}
+.hero-subtitle .roman{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:42px;
+  color:var(--gold);
+  line-height:1;
+  padding-top:6px;
+}
+.hero-subtitle .text{
+  font-size:17px;
+  line-height:1.7;
+  color:var(--paper-2);
+  font-weight:300;
+}
+
+.hero-bottom{
+  margin-top:80px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:40px;
+  flex-wrap:wrap;
+}
+.hero-cta-row{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.btn-primary{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  padding:18px 36px;
+  background:var(--gold);
+  color:var(--ink);
+  font-weight:500;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s ease;
+}
+.btn-primary:hover{background:var(--gold-soft);transform:translateY(-1px)}
+
+.btn-ghost{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  padding:18px 36px;
+  border:1px solid var(--line);
+  color:var(--paper);
+  transition:all 0.3s ease;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-ghost svg{transition:transform 0.3s ease}
+.btn-ghost:hover svg{transform:translateX(4px)}
+
+.hero-coords{
+  display:flex;
+  gap:48px;
+  align-items:flex-end;
+}
+.hero-coord{
+  text-align:right;
+}
+.hero-coord .label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.hero-coord .val{
+  font-family:var(--serif);
+  font-size:20px;
+  color:var(--paper);
+  font-weight:400;
+}
+
+/* hero side ornament */
+.hero-side{
+  position:absolute;
+  right:32px;
+  top:50%;
+  transform:translateY(-50%);
+  writing-mode:vertical-rl;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.4em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+.hero-side::after{
+  content:"";
+  width:1px;
+  height:60px;
+  background:var(--gold);
+  opacity:0.4;
+}
+@media (max-width:900px){
+  .hero-side{display:none}
+  .hero-coords{gap:24px}
+  .hero-coord .val{font-size:16px}
+}
+
+/* =========================================================
+   MARQUEE STRIP
+   ========================================================= */
+.marquee{
+  border-top:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  padding:32px 0;
+  overflow:hidden;
+  background:var(--ink-2);
+}
+.marquee-inner{
+  display:flex;
+  gap:80px;
+  animation:scroll 40s linear infinite;
+  white-space:nowrap;
+}
+.marquee-item{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  flex-shrink:0;
+  font-family:var(--serif);
+  font-size:24px;
+  font-style:italic;
+  color:var(--paper-2);
+  font-weight:400;
+}
+.marquee-item .star{
+  color:var(--emerald-glow);
+  font-size:18px;
+}
+.marquee-item .cn{
+  font-family:'Noto Serif SC',serif;
+  font-style:normal;
+  color:var(--paper);
+  font-size:20px;
+}
+@keyframes scroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* =========================================================
+   SECTION HEADER (shared)
+   ========================================================= */
+.sec-head{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:48px;
+  align-items:start;
+  margin-bottom:64px;
+  padding-bottom:32px;
+  border-bottom:1px solid var(--line-soft);
+}
+.sec-num{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  padding-top:14px;
+  white-space:nowrap;
+}
+.sec-title-wrap{
+  display:grid;
+  gap:12px;
+}
+.sec-title-cn{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(34px,5vw,56px);
+  line-height:1.05;
+  color:var(--paper);
+}
+.sec-title-en{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:22px;
+  color:var(--gold);
+  font-weight:400;
+}
+.sec-intro{
+  margin-top:24px;
+  font-size:17px;
+  line-height:1.75;
+  color:var(--paper-2);
+  max-width:640px;
+}
+@media (max-width:768px){
+  .sec-head{grid-template-columns:1fr;gap:16px}
+  .sec-num{padding-top:0}
+}
+
+/* =========================================================
+   ABOUT / MANIFESTO
+   ========================================================= */
+.about{
+  padding:140px 0 120px;
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:80px;
+  align-items:start;
+}
+.about-left .roman-num{
+  font-family:var(--serif);
+  font-size:140px;
+  line-height:0.85;
+  color:transparent;
+  -webkit-text-stroke:1px var(--gold);
+  font-weight:300;
+  margin-bottom:24px;
+}
+.about-left .label{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:24px;
+}
+.about-left .quote{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:24px;
+  line-height:1.4;
+  color:var(--paper);
+  font-weight:400;
+  padding-left:24px;
+  border-left:2px solid var(--gold);
+}
+.about-right p{
+  font-size:16px;
+  margin-bottom:20px;
+  color:var(--paper-2);
+}
+.about-right p.lead{
+  font-family:var(--serif);
+  font-size:22px;
+  line-height:1.5;
+  color:var(--paper);
+  font-weight:400;
+  margin-bottom:32px;
+}
+.about-right .attribution{
+  margin-top:32px;
+  display:flex;
+  gap:40px;
+  align-items:center;
+  padding-top:24px;
+  border-top:1px solid var(--line-soft);
+}
+.about-right .attribution .src{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.about-right .attribution .date{
+  font-family:var(--serif);
+  font-style:italic;
+  color:var(--gold);
+  font-size:14px;
+}
+@media (max-width:900px){
+  .about-grid{grid-template-columns:1fr;gap:48px}
+  .about-left .roman-num{font-size:80px}
+}
+
+/* =========================================================
+   PILLARS
+   ========================================================= */
+.pillars{
+  padding:120px 0;
+  background:linear-gradient(180deg,transparent,rgba(58,138,106,0.03),transparent);
+}
+.pillar-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border-top:1px solid var(--line-soft);
+}
+.pillar{
+  padding:48px 32px;
+  border-right:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  position:relative;
+  transition:all 0.4s ease;
+}
+.pillar:last-child{border-right:none}
+.pillar::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;
+  width:0;
+  height:2px;
+  background:var(--gold);
+  transition:width 0.4s ease;
+}
+.pillar:hover{background:rgba(201,169,97,0.03)}
+.pillar:hover::before{width:100%}
+
+.pillar-roman{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:48px;
+  color:var(--gold);
+  line-height:1;
+  margin-bottom:32px;
+  font-weight:300;
+}
+.pillar-cn{
+  font-family:'Noto Serif SC',serif;
+  font-size:22px;
+  font-weight:500;
+  margin-bottom:8px;
+  color:var(--paper);
+}
+.pillar-en{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.24em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:24px;
+}
+.pillar p{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--paper-2);
+}
+.pillar .ornament{
+  margin-top:32px;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.2em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.pillar .ornament::before{
+  content:"";
+  width:24px;
+  height:1px;
+  background:var(--gold);
+  opacity:0.4;
+}
+@media (max-width:900px){
+  .pillar-grid{grid-template-columns:1fr}
+  .pillar{border-right:none}
+}
+
+/* =========================================================
+   RESEARCH
+   ========================================================= */
+.research{
+  padding:140px 0;
+}
+.research-list{
+  border-top:1px solid var(--line);
+}
+.research-row{
+  display:grid;
+  grid-template-columns:80px 1fr auto;
+  gap:40px;
+  padding:36px 0;
+  border-bottom:1px solid var(--line-soft);
+  cursor:pointer;
+  transition:all 0.3s ease;
+  align-items:start;
+  position:relative;
+}
+.research-row::before{
+  content:"";
+  position:absolute;
+  left:0;
+  width:0;
+  height:1px;
+  background:var(--gold);
+  bottom:-1px;
+  transition:width 0.4s ease;
+}
+.research-row:hover::before{width:100%}
+.research-row:hover{background:rgba(201,169,97,0.02);padding-left:16px}
+
+.research-num{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  padding-top:6px;
+}
+.research-body h3{
+  font-family:var(--serif);
+  font-size:28px;
+  font-weight:400;
+  margin-bottom:6px;
+  color:var(--paper);
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.research-body h3 .en{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:18px;
+  color:var(--gold);
+  font-weight:400;
+}
+.research-body p{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--paper-2);
+  max-width:680px;
+}
+.research-tags{
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+.research-tag{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.18em;
+  padding:5px 10px;
+  border:1px solid var(--line);
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.research-arrow{
+  align-self:center;
+  color:var(--paper-mute);
+  transition:all 0.3s ease;
+}
+.research-row:hover .research-arrow{color:var(--gold);transform:translateX(8px)}
+@media (max-width:768px){
+  .research-row{grid-template-columns:60px 1fr;gap:20px}
+  .research-arrow{display:none}
+  .research-body h3{font-size:22px}
+}
+
+/* =========================================================
+   SCHEDULE / ACTIVITIES
+   ========================================================= */
+.schedule{
+  padding:140px 0;
+  background:linear-gradient(180deg,transparent,rgba(201,169,97,0.025),transparent);
+}
+.schedule-layout{
+  display:grid;
+  grid-template-columns:1fr 1.6fr;
+  gap:80px;
+}
+.schedule-left .aside{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:18px;
+  color:var(--paper);
+  line-height:1.6;
+  padding:32px;
+  border:1px solid var(--line);
+  background:rgba(201,169,97,0.03);
+  margin-top:40px;
+}
+.schedule-left .aside::before{
+  content:"※";
+  color:var(--gold);
+  font-size:24px;
+  display:block;
+  margin-bottom:12px;
+  font-style:normal;
+}
+.schedule-left .stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-top:48px;
+}
+.schedule-left .stat{
+  padding:20px;
+  border:1px solid var(--line-soft);
+  text-align:center;
+}
+.schedule-left .stat .num{
+  font-family:var(--serif);
+  font-size:42px;
+  font-weight:300;
+  color:var(--gold);
+  line-height:1;
+}
+.schedule-left .stat .label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+  margin-top:8px;
+}
+
+.sched-list{
+  border-top:1px solid var(--line);
+}
+.sched-row{
+  display:grid;
+  grid-template-columns:100px 1fr auto;
+  gap:32px;
+  padding:28px 0;
+  border-bottom:1px solid var(--line-soft);
+  align-items:center;
+  transition:all 0.3s ease;
+}
+.sched-row:hover{padding-left:12px;background:rgba(201,169,97,0.02)}
+.sched-time{
+  font-family:var(--mono);
+  font-size:13px;
+  letter-spacing:0.12em;
+  color:var(--gold);
+  font-weight:500;
+}
+.sched-body h4{
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:400;
+  margin-bottom:4px;
+  color:var(--paper);
+}
+.sched-body .meta{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.sched-status{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.24em;
+  padding:6px 12px;
+  text-transform:uppercase;
+}
+.sched-status.open{color:var(--emerald-glow);border:1px solid var(--emerald-deep);background:rgba(58,138,106,0.06)}
+.sched-status.tba{color:var(--paper-mute);border:1px solid var(--line)}
+.sched-status.weekly{color:var(--gold);border:1px solid var(--gold-deep);background:rgba(201,169,97,0.04)}
+@media (max-width:900px){
+  .schedule-layout{grid-template-columns:1fr;gap:48px}
+  .sched-row{grid-template-columns:1fr;gap:8px}
+  .sched-time{font-size:11px}
+}
+
+/* =========================================================
+   PEOPLE
+   ========================================================= */
+.people{
+  padding:140px 0;
+}
+.people-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  border-top:1px solid var(--line);
+  border-left:1px solid var(--line-soft);
+}
+.person{
+  padding:40px 28px;
+  border-right:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  position:relative;
+  transition:background 0.3s ease;
+}
+.person:hover{background:rgba(201,169,97,0.03)}
+.person-portrait{
+  width:100%;
+  aspect-ratio:1;
+  margin-bottom:24px;
+  background:linear-gradient(135deg,var(--ink-3),var(--ink-2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line-soft);
+}
+.person-portrait::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(201,169,97,0.1), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(58,138,106,0.1), transparent 50%);
+}
+.person-portrait .initials{
+  font-family:var(--serif);
+  font-size:64px;
+  color:var(--gold);
+  font-weight:300;
+  position:relative;
+  z-index:1;
+  letter-spacing:0.05em;
+}
+.person-portrait .corner{
+  position:absolute;
+  top:12px;left:12px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.person-portrait .corner-r{
+  position:absolute;
+  bottom:12px;right:12px;
+  font-family:var(--mono);
+  font-size:9px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.person-role{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.28em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.person-name{
+  font-family:var(--serif);
+  font-size:22px;
+  color:var(--paper);
+  font-weight:400;
+  margin-bottom:4px;
+  line-height:1.2;
+}
+.person-name .latin{
+  display:block;
+  font-style:italic;
+  color:var(--paper-mute);
+  font-size:15px;
+  margin-top:2px;
+}
+.person-bio{
+  font-size:13px;
+  line-height:1.6;
+  color:var(--paper-2);
+  margin-top:16px;
+}
+@media (max-width:900px){
+  .people-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){
+  .people-grid{grid-template-columns:1fr}
+}
+
+/* =========================================================
+   JOIN / CTA
+   ========================================================= */
+.join{
+  padding:140px 0;
+  position:relative;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,97,0.06), transparent 70%),
+    var(--ink);
+}
+.join-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.join-left .eyebrow{
+  margin-bottom:32px;
+  display:block;
+}
+.join-left h2{
+  font-size:clamp(40px,5vw,72px);
+  margin-bottom:32px;
+}
+.join-left h2 .accent{
+  font-style:italic;
+  color:var(--gold);
+  display:block;
+}
+.join-left p{
+  font-size:17px;
+  line-height:1.75;
+  margin-bottom:24px;
+}
+.join-criteria{
+  margin-top:48px;
+  display:grid;
+  gap:16px;
+}
+.criterion{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:16px;
+  align-items:start;
+  padding:16px 0;
+  border-bottom:1px solid var(--line-soft);
+}
+.criterion .ord{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--gold);
+  letter-spacing:0.2em;
+  padding-top:2px;
+}
+.criterion .text{
+  font-family:var(--serif);
+  font-size:18px;
+  color:var(--paper);
+  line-height:1.5;
+}
+.criterion .text small{
+  display:block;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+  margin-top:6px;
+  font-weight:400;
+}
+
+.join-right{
+  padding:48px;
+  border:1px solid var(--line);
+  background:rgba(201,169,97,0.02);
+  position:relative;
+}
+.join-right::before{
+  content:"";
+  position:absolute;
+  top:-1px;left:32px;right:32px;
+  height:2px;
+  background:var(--gold);
+}
+.join-right h4{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:24px;
+  font-weight:500;
+}
+.join-form{
+  display:grid;
+  gap:24px;
+}
+.field{
+  display:grid;
+  gap:8px;
+}
+.field label{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.field input,.field select,.field textarea{
+  font:inherit;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--line);
+  color:var(--paper);
+  padding:12px 0;
+  font-size:16px;
+  outline:none;
+  transition:border-color 0.3s ease;
+  font-family:var(--sans);
+  font-weight:300;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+.field select{cursor:pointer}
+.field select option{background:var(--ink);color:var(--paper)}
+.field textarea{resize:vertical;min-height:80px}
+
+.join-form button{
+  margin-top:16px;
+  padding:18px 24px;
+  background:var(--gold);
+  color:var(--ink);
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  font-weight:500;
+  transition:all 0.3s ease;
+  border:1px solid var(--gold);
+}
+.join-form button:hover{background:transparent;color:var(--gold)}
+
+@media (max-width:900px){
+  .join-inner{grid-template-columns:1fr;gap:48px}
+  .join-right{padding:32px 24px}
+}
+
+/* =========================================================
+   RESOURCES
+   ========================================================= */
+.resources{
+  padding:140px 0;
+  border-top:1px solid var(--line-soft);
+}
+.res-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border-top:1px solid var(--line);
+}
+.res-card{
+  padding:48px 32px;
+  border-right:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  transition:all 0.3s ease;
+  position:relative;
+}
+.res-card:last-child{border-right:none}
+.res-card:hover{background:rgba(201,169,97,0.03)}
+.res-icon{
+  width:48px;height:48px;
+  margin-bottom:24px;
+  color:var(--gold);
+}
+.res-card h4{
+  font-family:var(--serif);
+  font-size:24px;
+  margin-bottom:8px;
+  color:var(--paper);
+  font-weight:400;
+}
+.res-card .sub{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.22em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.res-card p{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--paper-2);
+  margin-bottom:24px;
+}
+.res-link{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.22em;
+  color:var(--gold);
+  text-transform:uppercase;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--gold-deep);
+}
+.res-link:hover{color:var(--gold-soft)}
+.res-link svg{transition:transform 0.3s ease}
+.res-link:hover svg{transform:translateX(4px)}
+@media (max-width:900px){
+  .res-grid{grid-template-columns:1fr}
+  .res-card{border-right:none}
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer{
+  padding:80px 0 40px;
+  border-top:1px solid var(--line);
+  background:var(--ink-2);
+}
+.footer-top{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:48px;
+  padding-bottom:64px;
+  border-bottom:1px solid var(--line-soft);
+}
+.footer-brand .logo-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:24px;
+}
+.footer-brand .name{
+  font-family:var(--serif);
+  font-size:24px;
+  color:var(--paper);
+}
+.footer-brand .name .sep{color:var(--gold);margin:0 8px}
+.footer-brand .tag{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.footer-brand p{
+  font-size:14px;
+  line-height:1.7;
+  color:var(--paper-2);
+  max-width:340px;
+}
+.footer-col h5{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:24px;
+  font-weight:500;
+}
+.footer-col ul{display:grid;gap:12px}
+.footer-col a{
+  font-size:14px;
+  color:var(--paper-2);
+  transition:color 0.3s ease;
+}
+.footer-col a:hover{color:var(--gold)}
+
+.footer-bottom{
+  padding-top:32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:24px;
+}
+.footer-bottom .copy{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.2em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.footer-bottom .coord{
+  display:flex;
+  gap:24px;
+}
+.footer-bottom .coord span{
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.24em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.footer-bottom .coord span strong{
+  color:var(--gold);
+  font-weight:500;
+  margin-left:6px;
+}
+@media (max-width:768px){
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media (max-width:480px){
+  .footer-top{grid-template-columns:1fr}
+}
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.in{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================================================
+   DECORATIVE
+   ========================================================= */
+.corner-ornament{
+  position:absolute;
+  width:80px;height:80px;
+  pointer-events:none;
+}
+.corner-ornament.tl{top:0;left:0}
+.corner-ornament.tr{top:0;right:0;transform:scaleX(-1)}
+.corner-ornament.bl{bottom:0;left:0;transform:scaleY(-1)}
+.corner-ornament.br{bottom:0;right:0;transform:scale(-1,-1)}
+.corner-ornament svg{width:100%;height:100%}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-deep)}
+::selection{background:var(--gold);color:var(--ink)}
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     NAV
+     ===================================================== -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="15" stroke="#c9a961" stroke-width="0.6" opacity="0.4"/>
+          <path d="M16 4 L18.4 12 L26.5 12 L20 17 L22.5 25 L16 20 L9.5 25 L12 17 L5.5 12 L13.6 12 Z" fill="none" stroke="#3a8a6a" stroke-width="1"/>
+          <circle cx="16" cy="16" r="1.5" fill="#c9a961"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Mi Estas<span class="sep">·</span>绿星社</div>
+        <span class="brand-tag">Esperanto &amp; AI Society</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#philosophy">理念</a>
+      <a href="#research">研究</a>
+      <a href="#schedule">活动</a>
+      <a href="#people">成员</a>
+      <a href="#resources">资源</a>
+    </div>
+    <a href="#join" class="nav-cta"><span>加入我们</span></a>
+  </div>
+</nav>
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+<section class="hero" id="top">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-side">MMXXVI · ESTABLISHED · ANNO VERDA STELO</div>
+
+  <div class="container hero-inner">
+    <div class="hero-meta">
+      <span class="line"></span>
+      <span class="label">Anno · 2026</span>
+      <span class="line"></span>
+      <span class="label">Societo · 第 I 期</span>
+      <span class="line"></span>
+    </div>
+
+    <h1 class="hero-title">
+      <span>Mi</span>
+      <span class="accent">Estas</span>
+    </h1>
+
+    <div class="hero-subtitle">
+      <div class="roman">𐑚</div>
+      <div class="text">
+        一座把「世界语」与「人工智能」放在同一张书桌上的社团。<br>
+        普世语言遇见智能纪元,研究语言对齐、跨语种智能体,与「语言平等」的技术伦理。
+      </div>
+    </div>
+
+    <div class="hero-bottom">
+      <div class="hero-cta-row">
+        <a href="#join" class="btn-primary">报名纳新 · Aliĝi</a>
+        <a href="#research" class="btn-ghost">
+          探索研究方向
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="hero-coords">
+        <div class="hero-coord">
+          <div class="label">Founded</div>
+          <div class="val">MMXXVI</div>
+        </div>
+        <div class="hero-coord">
+          <div class="label">Temo</div>
+          <div class="val">Lingvo · AI</div>
+        </div>
+        <div class="hero-coord">
+          <div class="label">Status</div>
+          <div class="val">接受纳新</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     MARQUEE
+     ===================================================== -->
+<div class="marquee">
+  <div class="marquee-inner">
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">世界语</span><span class="star">✶</span><span>Esperanto</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">大语言模型</span><span class="star">✶</span><span>Large Language Models</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">多语种对齐</span><span class="star">✶</span><span>Cross-lingual Alignment</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">语言平等</span><span class="star">✶</span><span>Language Equality</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">智能体协作</span><span class="star">✶</span><span>Agent Collaboration</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">普世语法</span><span class="star">✶</span><span>Universal Grammar</span></div>
+    <!-- duplicate for seamless scroll -->
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">世界语</span><span class="star">✶</span><span>Esperanto</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">大语言模型</span><span class="star">✶</span><span>Large Language Models</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">多语种对齐</span><span class="star">✶</span><span>Cross-lingual Alignment</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">语言平等</span><span class="star">✶</span><span>Language Equality</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">智能体协作</span><span class="star">✶</span><span>Agent Collaboration</span></div>
+    <div class="marquee-item"><span class="star">✶</span><span class="cn">普世语法</span><span class="star">✶</span><span>Universal Grammar</span></div>
+  </div>
+</div>
+
+<!-- =====================================================
+     ABOUT / MANIFESTO
+     ===================================================== -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-num">— I —</div>
+      <div class="sec-title-wrap">
+        <div class="sec-title-cn">关于本会</div>
+        <div class="sec-title-en">Pri la Societo</div>
+        <p class="sec-intro">Mi Estas(绿星社)是一个以「世界语 · 人工智能」为母题的学生社团。我们把一百四十年前柴门霍夫的语言理想,与二十一世纪二十年代的智能浪潮,放进同一间研讨室。</p>
+      </div>
+    </div>
+
+    <div class="about-grid reveal">
+      <div class="about-left">
+        <div class="roman-num">I.</div>
+        <div class="label">Manifesto · 宣言</div>
+        <div class="quote">
+          "一种普世语法,一门中立语言,一群相信智能可以更平权的学生。"
+        </div>
+      </div>
+      <div class="about-right">
+        <p class="lead">
+          大语言模型让人类第一次有可能用同一种「思考框架」理解所有语言。但模型资源、词表、训练语料,仍然不均衡。
+        </p>
+        <p>
+          世界语是 1887 年由 L. L. Zamenhof 设计的「中立辅助语」,其初衷是让不同母语者之间拥有公平的沟通工具。一百四十年后,人工智能继承了同一种野心:把所有人都装进同一个智能系统,而不让任何人因为语言而被落下。
+        </p>
+        <p>
+          我们研究的不是「世界语本身」,而是「当一种人造的、规则清晰的、被设计过的语言,进入到大模型世界,会发生什么」。这既是语言学问题,也是对齐问题、评测问题,也是 AI 伦理问题。
+        </p>
+        <div class="attribution">
+          <span class="src">— Mi Estas Founding Statement</span>
+          <span class="date">MMXXVI · Autumn</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PILLARS / PHILOSOPHY
+     ===================================================== -->
+<section class="pillars" id="philosophy">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-num">— II —</div>
+      <div class="sec-title-wrap">
+        <div class="sec-title-cn">三块基石</div>
+        <div class="sec-title-en">Tri Principoj</div>
+        <p class="sec-intro">世界语为人,人工智能为器。三个原则规定了我们的研究方向、社群形态与底线。</p>
+      </div>
+    </div>
+
+    <div class="pillar-grid reveal">
+      <div class="pillar">
+        <div class="pillar-roman">i.</div>
+        <div class="pillar-cn">普世语法</div>
+        <div class="pillar-en">Universal Grammar</div>
+        <p>研究规则清晰的人造语言,如何作为大模型「结构化推理」的探针。我们用 Esperanto 当作模型可解释性的实验场。</p>
+        <div class="ornament">Principio Unua</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-roman">ii.</div>
+        <div class="pillar-cn">跨文化连接</div>
+        <div class="pillar-en">Cross-cultural Bridge</div>
+        <p>用同一门第二语言,跨越地域与方言壁垒。我们每月一次「世界语 × AI」双语沙龙,任何母语者都被欢迎。</p>
+        <div class="ornament">Principio Dua</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-roman">iii.</div>
+        <div class="pillar-cn">智能平权</div>
+        <div class="pillar-en">AI for Linguistic Equality</div>
+        <p>评估小语种、低资源语言在大模型时代的处境。我们关注被忽略的 token、被截断的对话,以及被低估的语言。</p>
+        <div class="ornament">Principio Tria</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     RESEARCH
+     ===================================================== -->
+<section class="research" id="research">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-num">— III —</div>
+      <div class="sec-title-wrap">
+        <div class="sec-title-cn">研究方向</div>
+        <div class="sec-title-en">Esplorado &amp; Projektoj</div>
+        <p class="sec-intro">四大主线,覆盖语料、模型、评测与系统。具体题目由报名方向的同学共同拟定。</p>
+      </div>
+    </div>
+
+    <div class="research-list reveal">
+      <div class="research-row">
+        <div class="research-num">N° 01</div>
+        <div class="research-body">
+          <h3>世界语语料与词表构建<span class="en">Corpus &amp; Tokenization</span></h3>
+          <p>为世界语建立高质量、结构化的训练与评测语料。重新审视 tokenizer 在规则化人造语言下的公平性,研究词表设计对低资源语言模型性能的影响。</p>
+          <div class="research-tags">
+            <span class="research-tag">NLP</span>
+            <span class="research-tag">Tokenization</span>
+            <span class="research-tag">Corpus</span>
+          </div>
+        </div>
+        <div class="research-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="research-row">
+        <div class="research-num">N° 02</div>
+        <div class="research-body">
+          <h3>多语种大模型对齐<span class="en">Cross-lingual Alignment</span></h3>
+          <p>在大模型「混合专家人」与「跨语种对齐」研究中,以世界语作为可解释的中介语言(bridge language),考察不同语言间的语义迁移与推理能力。</p>
+          <div class="research-tags">
+            <span class="research-tag">LLM</span>
+            <span class="research-tag">Alignment</span>
+            <span class="research-tag">MoE</span>
+          </div>
+        </div>
+        <div class="research-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="research-row">
+        <div class="research-num">N° 03</div>
+        <div class="research-body">
+          <h3>跨语种智能体协作<span class="en">Multilingual Agents</span></h3>
+          <p>设计能以世界语为「公共工作语言」的多智能体系统。考察在多语种 ReAct 框架下,人造语言能否降低智能体间的语义摩擦。</p>
+          <div class="research-tags">
+            <span class="research-tag">Agents</span>
+            <span class="research-tag">ReAct</span>
+            <span class="research-tag">Multi-Agent</span>
+          </div>
+        </div>
+        <div class="research-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="research-row">
+        <div class="research-num">N° 04</div>
+        <div class="research-body">
+          <h3>低资源语言与 AI 伦理<span class="en">Low-resource &amp; Ethics</span></h3>
+          <p>评估小语种、低资源语种在大模型时代的可访问性。围绕语言平等、数据正义、token 偏见,撰写可公开引用的研究报告。</p>
+          <div class="research-tags">
+            <span class="research-tag">Ethics</span>
+            <span class="research-tag">Eval</span>
+            <span class="research-tag">Policy</span>
+          </div>
+        </div>
+        <div class="research-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     SCHEDULE / ACTIVITIES
+     ===================================================== -->
+<section class="schedule" id="schedule">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-num">— IV —</div>
+      <div class="sec-title-wrap">
+        <div class="sec-title-cn">学期活动</div>
+        <div class="sec-title-en">Agadoj Ĉi-Semestre</div>
+        <p class="sec-intro">每周沙龙 + 每月研讨 + 每季黑客松。开放给所有对世界语或 AI 感兴趣的同学,母语不限。</p>
+      </div>
+    </div>
+
+    <div class="schedule-layout reveal">
+      <div class="schedule-left">
+        <div class="eyebrow">附记 · Noto</div>
+        <div class="aside">
+          所有活动均使用双语:中文为工作语言,世界语为「仪式语言」(开场、闭幕、暗号)。欢迎完全不会世界语的同学加入,这也是入门的好方式。
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="num">24</div>
+            <div class="label">场/年</div>
+          </div>
+          <div class="stat">
+            <div class="num">04</div>
+            <div class="label">次黑客松</div>
+          </div>
+          <div class="stat">
+            <div class="num">02</div>
+            <div class="label">语种</div>
+          </div>
+          <div class="stat">
+            <div class="num">∞</div>
+            <div class="label">种研究方向</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sched-list">
+        <div class="sched-row">
+          <div class="sched-time">周三 19:00</div>
+          <div class="sched-body">
+            <h4>世界语沙龙</h4>
+            <div class="meta">Ĉiuvendrede · Esperanta Klubo · 主楼 305</div>
+          </div>
+          <div class="sched-status weekly">Weekly</div>
+        </div>
+        <div class="sched-row">
+          <div class="sched-time">周六 14:00</div>
+          <div class="sched-body">
+            <h4>AI · 语言学读书会</h4>
+            <div class="meta">Diskutrondoj · Lektado · 图书馆 · B2-07</div>
+          </div>
+          <div class="sched-status weekly">Weekly</div>
+        </div>
+        <div class="sched-row">
+          <div class="sched-time">月度 · 第 2 周</div>
+          <div class="sched-body">
+            <h4>技术研讨会</h4>
+            <div class="meta">Seminaro · 客座讲者 · 论文精读 · 在线 + 线下</div>
+          </div>
+          <div class="sched-status open">Aperta</div>
+        </div>
+        <div class="sched-row">
+          <div class="sched-time">季度 · 末月</div>
+          <div class="sched-body">
+            <h4>跨语种黑客松</h4>
+            <div class="meta">Hackathon · 48h · 团队 · 公开提交与评奖</div>
+          </div>
+          <div class="sched-status open">Aperta</div>
+        </div>
+        <div class="sched-row">
+          <div class="sched-time">学期末</div>
+          <div class="sched-body">
+            <h4>研究项目结题展</h4>
+            <div class="meta">Finala Prezento · 海报 · 公开报告</div>
+          </div>
+          <div class="sched-status tba">TBA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PEOPLE
+     ===================================================== -->
+<section class="people" id="people">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-num">— V —</div>
+      <div class="sec-title-wrap">
+        <div class="sec-title-cn">指导与核心成员</div>
+        <div class="sec-title-en">Gvidantoj &amp; Kerno</div>
+        <p class="sec-intro">指导老师、社长、研究负责人。成员信息将随纳新陆续更新。</p>
+      </div>
+    </div>
+
+    <div class="people-grid reveal">
+      <div class="person">
+        <div class="person-portrait">
+          <div class="corner">ME — 01</div>
+          <div class="initials">✶</div>
+          <div class="corner-r">Advisor</div>
+        </div>
+        <div class="person-role">指导教师 · Konsilanto</div>
+        <div class="person-name">[待填写姓名]<span class="latin">Advisor · TBD</span></div>
+        <div class="person-bio">研究方向 / 院系背景介绍。</div>
+      </div>
+
+      <div class="person">
+        <div class="person-portrait">
+          <div class="corner">ME — 02</div>
+          <div class="initials">✶</div>
+          <div class="corner-r">President</div>
+        </div>
+        <div class="person-role">社长 · Prezidanto</div>
+        <div class="person-name">[待填写姓名]<span class="latin">President · TBD</span></div>
+        <div class="person-bio">一句话个人介绍 / 一句世界语格言。</div>
+      </div>
+
+      <div class="person">
+        <div class="person-portrait">
+          <div class="corner">ME — 03</div>
+          <div class="initials">✶</div>
+          <div class="corner-r">Research</div>
+        </div>
+        <div class="person-role">研究负责人 · Esplora Estro</div>
+        <div class="person-name">[待填写姓名]<span class="latin">Research Lead · TBD</span></div>
+        <div class="person-bio">负责协调语料 / 对齐 / Agent / 伦理四条研究主线。</div>
+      </div>
+
+      <div class="person">
+        <div class="person-portrait">
+          <div class="corner">ME — 04</div>
+          <div class="initials">✶</div>
+          <div class="corner-r">Esperanto</div>
+        </div>
+        <div class="person-role">语言顾问 · Lingva Konsilanto</div>
+        <div class="person-name">[待填写姓名]<span class="latin">Esperanto Lead · TBD</span></div>
+        <div class="person-bio">负责世界语教学 / 双语沙龙 / 语料标注规范。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     JOIN
+     ===================================================== -->
+<section class="join" id="join">
+  <div class="container">
+    <div class="join-inner">
+      <div class="join-left reveal">
+        <span class="eyebrow">Aliĝi · 纳新</span>
+        <h2>
+          成为 Mi Estas<br>
+          <span class="accent">第 II 期成员。</span>
+        </h2>
+        <p>
+          我们没有专业门槛。任何对「语言 × 智能」感兴趣的同学都可以报名。报名前请阅读三条招募条件。
+        </p>
+        <div class="join-criteria">
+          <div class="criterion">
+            <div class="ord">N° 01</div>
+            <div class="text">好奇驱动<small>Scioj &amp; Scivolemo</small></div>
+          </div>
+          <div class="criterion">
+            <div class="ord">N° 02</div>
+            <div class="text">持续出席<small>Ĉeesto &amp; Sindevigo</small></div>
+          </div>
+          <div class="criterion">
+            <div class="ord">N° 03</div>
+            <div class="text">愿意读 / 写一点点世界语<small>Esperanta Volo</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="join-right reveal">
+        <h4>— Aliĝilo · 报名表 —</h4>
+        <form class="join-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='✓ 已提交 · Dankon';">
+          <div class="field">
+            <label>姓名 · Nomo</label>
+            <input type="text" placeholder="您的姓名" required>
+          </div>
+          <div class="field">
+            <label>院系 / 年级 · Fako &amp; Klaso</label>
+            <input type="text" placeholder="如:计算机学院 23 级" required>
+          </div>
+          <div class="field">
+            <label>感兴趣的方向 · Interesa Direkto</label>
+            <select required>
+              <option value="">— 请选择 —</option>
+              <option>语料 / Tokenization</option>
+              <option>跨语种对齐</option>
+              <option>多语种 Agent</option>
+              <option>低资源 / AI 伦理</option>
+              <option>世界语沙龙 / 语言学</option>
+              <option>暂未确定</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>为什么想加入 · Kial Aliĝi</label>
+            <textarea placeholder="一两句话即可。" required></textarea>
+          </div>
+          <button type="submit">提交申请 · Sendi</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     RESOURCES
+     ===================================================== -->
+<section class="resources" id="resources">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div class="sec-num">— VI —</div>
+      <div class="sec-title-wrap">
+        <div class="sec-title-cn">资源与社群</div>
+        <div class="sec-title-en">Rimedoj &amp; Komunumo</div>
+        <p class="sec-intro">所有学习材料、活动录像、研究代码与会议纪要,均在此公开。</p>
+      </div>
+    </div>
+
+    <div class="res-grid reveal">
+      <div class="res-card">
+        <div class="res-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M8 6 L24 18 L40 6"/>
+            <path d="M8 6 L8 42 L24 42 M40 6 L40 42 L24 42"/>
+            <path d="M16 28 L20 32 L32 20"/>
+          </svg>
+        </div>
+        <div class="sub">Dokumentoj</div>
+        <h4>研究文档</h4>
+        <p>四条研究主线的综述、参考论文、每周进度与会议纪要。所有文档版本化管理,任何人可编辑与评论。</p>
+        <a href="#" class="res-link">前往 Wiki
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="res-card">
+        <div class="res-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="4" y="10" width="40" height="28" rx="2"/>
+            <path d="M4 22 L24 32 L44 22"/>
+            <circle cx="38" cy="14" r="2"/>
+          </svg>
+        </div>
+        <div class="sub">Filmoj &amp; Sono</div>
+        <h4>讲座视频</h4>
+        <p>每月一次的客座讲座与研讨会录像,均带中文字幕与 Esperanto 摘要。订阅 YouTube / B 站频道即可同步更新。</p>
+        <a href="#" class="res-link">前往频道
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="res-card">
+        <div class="res-icon">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M24 4 C16 4 8 10 8 18 C8 24 12 28 16 30 L16 38 L32 38 L32 30 C36 28 40 24 40 18 C44 10 36 4 24 4 Z"/>
+            <circle cx="20" cy="18" r="1.5" fill="currentColor"/>
+            <circle cx="28" cy="18" r="1.5" fill="currentColor"/>
+            <path d="M16 42 L24 44 L32 42"/>
+          </svg>
+        </div>
+        <div class="sub">Kodo</div>
+        <h4>代码仓库</h4>
+        <p>语料处理脚本、tokenizer 实验、ReAct 多语种 Agent 的最小实现。MIT 协议,欢迎 fork 与提交 PR。</p>
+        <a href="#" class="res-link">前往 GitHub
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-row">
+          <div class="brand-mark">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="15" stroke="#c9a961" stroke-width="0.6" opacity="0.4"/>
+              <path d="M16 4 L18.4 12 L26.5 12 L20 17 L22.5 25 L16 20 L9.5 25 L12 17 L5.5 12 L13.6 12 Z" fill="none" stroke="#3a8a6a" stroke-width="1"/>
+              <circle cx="16" cy="16" r="1.5" fill="#c9a961"/>
+            </svg>
+          </div>
+          <div>
+            <div class="name">Mi Estas<span class="sep">·</span>绿星社</div>
+            <div class="tag">Esperanto &amp; AI Society · MMXXVI</div>
+          </div>
+        </div>
+        <p>一座把「世界语」与「人工智能」放在同一张书桌上的学生社团。<br>普世语言遇见智能纪元。</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>探索</h5>
+        <ul>
+          <li><a href="#about">关于</a></li>
+          <li><a href="#philosophy">理念</a></li>
+          <li><a href="#research">研究</a></li>
+          <li><a href="#schedule">活动</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>加入</h5>
+        <ul>
+          <li><a href="#join">报名纳新</a></li>
+          <li><a href="#people">核心成员</a></li>
+          <li><a href="#">沙龙报名</a></li>
+          <li><a href="#">客座讲者</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>联系</h5>
+        <ul>
+          <li><a href="#">邮件</a></li>
+          <li><a href="#">微信公众号</a></li>
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">Discord</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="copy">© MMXXVI Mi Estas · All Rights Reserved</div>
+      <div class="coord">
+        <span>Anno:<strong>2026</strong></span>
+        <span>Temo:<strong>Lingvo · AI</strong></span>
+        <span>Status:<strong>Aperta</strong></span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // nav scroll state
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }, {passive:true});
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
