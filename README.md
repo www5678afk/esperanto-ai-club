@@ -1,60 +1,68 @@
-# Mi Estas · 世界语与人工智能社团
+# Mi Estas · 英语学院世界语专业俱乐部
 
-> 当普世语言遇见智能纪元。
-> *Kiam la universala lingvo renkontas la epokon de artefarita intelekto.*
-
-**Mi Estas**(中文别名「绿星社」)是一个以「世界语 × 人工智能」为母题的学生社团。本仓库托管社团招募季的官方单页网站源代码。
-
-## 项目内容
-
-- 单文件静态站点 `index.html`,内联 CSS 与脚本,无外部构建步骤。
-- 包含八个段落:导航 / Hero / Marquee / 关于本会 / 三块基石 / 研究方向 / 学期活动 / 成员 / 纳新表单 / 资源 / 页脚。
-- 设计基调:深墨色背景、衬线大标题、金色与翡翠色点缀,带轻微噪点纹理与滚动显现动效。
-- 双语呈现:中文为工作语言,世界语作为「仪式语言」(开场、闭幕、暗号)。
-
-## 本地预览
-
-直接双击打开 `index.html` 即可在浏览器查看,或启动一个本地静态服务器:
-
-```bash
-# 任选其一
-python -m http.server 8000
-npx serve .
-```
-
-然后访问 <http://localhost:8000>。
+吉林外国语大学英语学院下的一个小社团——英语学院世界语专业俱乐部 Mi Estas。学世界语，也聊 AI 工具。
 
 ## 文件结构
 
 ```
-esperanto-ai-club/
-├── index.html      # 站点全部内容、样式与脚本
-├── README.md       # 你正在读的这份说明
-└── .gitignore
+.
+├── index.html   # 单页全部内容（HTML + CSS + JS）
+├── qr.png       # 【你需要提供】微信群聊二维码图片
+└── README.md
 ```
 
-## 部署建议
+## 如何替换成真实的微信群聊二维码
 
-由于是纯静态文件,可直接托管在 GitHub Pages、Netlify、Cloudflare Pages、Vercel 等静态服务上。GitHub Pages 启用方式:Settings → Pages → Source 选择 `main` 分支根目录。
+页面加载时会自动尝试 `qr.png`。两种情况：
 
-## 研究方向(四条主线)
+1. **`qr.png` 存在**：弹窗里直接显示真实二维码
+2. **`qr.png` 不存在**：自动回退到 JS 生成的占位图案（带「VS · MMXXVI」徽章的伪 QR）
 
-1. **世界语语料与词表构建** *Corpus & Tokenization*
-2. **多语种大模型对齐** *Cross-lingual Alignment*
-3. **跨语种智能体协作** *Multilingual Agents*
-4. **低资源语言与 AI 伦理** *Low-resource & Ethics*
+替换步骤：
 
-## 社群原则(三块基石 / Tri Principoj)
+1. 把你拿到的微信群聊二维码图片保存为 `qr.png`（PNG / JPG 均可，建议 ≥ 400×400 像素）
+2. 把 `qr.png` 放到和 `index.html` **同一个目录**
+3. 刷新页面，点击「加入群聊」即可看到真实二维码
 
-- **普世语法** *Universal Grammar*
-- **跨文化连接** *Cross-cultural Bridge*
-- **智能平权** *AI for Linguistic Equality*
+如需更改文件名或路径，编辑 `index.html` 中下面这一行即可：
 
-## 加入
+```html
+<img src="qr.png" alt="微信群聊二维码" class="qr-img" id="qrImg" ...>
+```
 
-打开页面后,直接滚动到「加入我们」段落填写表单即可。
-申请门槛只有三条:好奇驱动、持续出席、愿意读/写一点点世界语。
+## 本地预览
 
----
+直接用浏览器打开 `index.html` 即可；也可以起一个本地静态服务：
 
-*Anno · MMXXVI · Societo 第 I 期 · 接受纳新中*
+```bash
+# Python 3
+python -m http.server 8000
+
+# Node.js (需要 npx)
+npx serve .
+```
+
+打开 `http://localhost:8000`。
+
+## 部署
+
+任何支持静态网站的平台都可：GitHub Pages、Netlify、Vercel、Cloudflare Pages、自建 Nginx 等。
+
+### GitHub Pages（推荐）
+
+```bash
+git init
+git add index.html README.md
+git commit -m "Initial commit"
+gh repo create mi-estas --public --source=. --remote=origin --push
+gh repo edit --enable-pages --pages-source-branch=main --pages-source-path=/
+```
+
+部署完成后访问 `https://<username>.github.io/mi-estas`。
+
+## 设计说明
+
+- **风格延续**：暗色 + 暖金 + 翡翠绿；Cormorant Garamond 衬线斜体 + Noto Serif SC 中文 + JetBrains Mono 标签；世界语与中文混排
+- **海报式单页**：所有内容压缩进一屏到底的一页，**只有一个 CTA 入口**通向群聊
+- **可替换 QR**：见上文「如何替换成真实的微信群聊二维码」
+- **占位图案**：当无 `qr.png` 时显示，避免页面破图
